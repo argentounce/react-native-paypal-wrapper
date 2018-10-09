@@ -147,6 +147,11 @@ public class RNPaypalWrapperModule extends ReactContextBaseJavaModule implements
 
     }
 
+    if(params.hasKey("language")){
+      String language = params.getString("language");
+      config = config.languageOrLocale(language);
+    }
+
     Intent intent = new Intent(reactContext, PayPalService.class);
     intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
     reactContext.startService(intent);
