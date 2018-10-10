@@ -56,11 +56,11 @@ RCT_EXPORT_METHOD(initializeWithOptions:(NSString *) environment clientId:(NSStr
         self.configuration.merchantPrivacyPolicyURL = [NSURL URLWithString:merchantPrivacyPolicyUri];
         self.configuration.merchantUserAgreementURL = [NSURL URLWithString:merchantUserAgreementUri];
         
-        if([options objectForKey:@"language"] != nil ){
-            NSString *language = [RCTConvert NSString:options[@"language"]];
-            self.configuration.languageOrLocale = language;
-        }
-        
+    }
+    
+    if([options objectForKey:@"language"] != nil ){
+        NSString *language = [RCTConvert NSString:options[@"language"]];
+        self.configuration.languageOrLocale = language;
     }
 }
 
