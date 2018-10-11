@@ -136,6 +136,8 @@ public class RNPaypalWrapperModule extends ReactContextBaseJavaModule implements
   public void initializeWithOptions(String environment, String clientId, ReadableMap params) {
     config = new PayPalConfiguration().environment(environment).clientId(clientId);
 
+    config = config.acceptCreditCards(false);
+
     if(params.hasKey("merchantName") && params.hasKey("merchantPrivacyPolicyUri") && params.hasKey("merchantUserAgreementUri")) {
       String merchantName = params.getString("merchantName");
       String merchantPrivacyPolicyUri = params.getString("merchantPrivacyPolicyUri");
