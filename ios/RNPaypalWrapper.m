@@ -153,7 +153,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
 {
     [paymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.resolve) {
-            self.resolve(completedPayment.confirmation);
+            self.resolve(completedPayment);
         }
     }];
 }
