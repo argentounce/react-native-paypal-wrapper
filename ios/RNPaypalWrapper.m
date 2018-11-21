@@ -105,7 +105,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     NSString *price = [RCTConvert NSString:options[@"price"]];
     NSString *currency = [RCTConvert NSString:options[@"currency"]];
     NSString *description = [RCTConvert NSString:options[@"description"]];
-    NSString *invoice_id = [[RCTConvert] NSString:options[@"invoiceID"]];
+    NSString *invoice_id = [RCTConvert NSString:options[@"invoiceID"]];
     
     self.payment = [[PayPalPayment alloc] init];
     [self.payment setAmount:[[NSDecimalNumber alloc] initWithString:price]];
