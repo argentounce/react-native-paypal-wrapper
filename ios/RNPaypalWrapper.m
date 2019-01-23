@@ -3,7 +3,7 @@
 #import "RCTConvert.h"
 #import "PayPalMobile.h"
 
-@interface RNPaypalWrapper () <PayPalPaymentDelegate, RCTBridgeModule>
+@interface RNPaypalWrapper () <PayPalPaymentDelegate, PayPalFuturePaymentDelegate, RCTBridgeModule>
 
 @property PayPalPayment *payment;
 @property PayPalConfiguration *configuration;
@@ -151,6 +151,8 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
 - (void)payPalPaymentViewController:(PayPalPaymentViewController *)paymentViewController
                  didCompletePayment:(PayPalPayment *)completedPayment
 {
+    NSLog(@"%@",completedPayment);
+    
     [paymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.resolve) {
             self.resolve(completedPayment);
@@ -165,6 +167,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     [futurePaymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.reject) {
             NSError *error = [NSError errorWithDomain:RCTErrorDomain code:1 userInfo:NULL];
+            NSLog(@"%@",error.localizedDescription)
             self.reject(USER_CANCELLED, USER_CANCELLED, error);
         }
     }];
@@ -173,6 +176,7 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
 - (void)payPalFuturePaymentViewController:(PayPalFuturePaymentViewController *)futurePaymentViewController
                 didAuthorizeFuturePayment:(NSDictionary *)futurePaymentAuthorization {
     // Be sure to dismiss the PayPalLoginViewController.
+    NSLog(@"%@",futurePaymentAuthorization);
     [futurePaymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.resolve) {
             self.resolve(futurePaymentAuthorization);
