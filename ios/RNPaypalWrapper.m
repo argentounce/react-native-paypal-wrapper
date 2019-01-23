@@ -62,8 +62,6 @@ RCT_EXPORT_METHOD(initializeWithOptions:(NSString *) environment clientId:(NSStr
         NSString *language = [RCTConvert NSString:options[@"language"]];
         self.configuration.languageOrLocale = language;
     }
-    
-    NSLog(@"Paypal initialized");
 }
 
 RCT_EXPORT_METHOD(getClientMetadataId:(RCTPromiseResolveBlock)resolve
@@ -134,8 +132,6 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     dispatch_async(dispatch_get_main_queue(), ^{
         [visibleVC presentViewController:vc animated:YES completion:nil];
     });
-    
-    NSLog(@"Paypal Pay Presented")
 
 }
 
@@ -147,7 +143,6 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     [paymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.reject) {
             NSError *error = [NSError errorWithDomain:RCTErrorDomain code:1 userInfo:NULL];
-            NSLog(@"%@",error.localizedDescription);
             self.reject(USER_CANCELLED, USER_CANCELLED, error);
         }
     }];
@@ -156,14 +151,9 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
 - (void)payPalPaymentViewController:(PayPalPaymentViewController *)paymentViewController
                  didCompletePayment:(PayPalPayment *)completedPayment
 {
-    NSLog(@"%@",completedPayment);
-    
     [paymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.resolve) {
-            
-            NSString *paymentAsString = [NSString stringWithFormat:@"%@",completedPayment];
-            
-            self.resolve(paymentAsString);
+            self.resolve(completedPayment.confirmation);
         }
     }];
 }
@@ -175,7 +165,6 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     [futurePaymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.reject) {
             NSError *error = [NSError errorWithDomain:RCTErrorDomain code:1 userInfo:NULL];
-            NSLog(@"%@",error.localizedDescription);
             self.reject(USER_CANCELLED, USER_CANCELLED, error);
         }
     }];
@@ -184,7 +173,6 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
 - (void)payPalFuturePaymentViewController:(PayPalFuturePaymentViewController *)futurePaymentViewController
                 didAuthorizeFuturePayment:(NSDictionary *)futurePaymentAuthorization {
     // Be sure to dismiss the PayPalLoginViewController.
-    NSLog(@"%@",futurePaymentAuthorization);
     [futurePaymentViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
         if (self.resolve) {
             self.resolve(futurePaymentAuthorization);
