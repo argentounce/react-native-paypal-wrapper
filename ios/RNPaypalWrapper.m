@@ -43,8 +43,8 @@ RCT_EXPORT_METHOD(initializeWithOptions:(NSString *) environment clientId:(NSStr
         [PayPalMobile preconnectWithEnvironment:environment];
     });
 
-    if([options objectForKey:@"merchantName"] != nil 
-        && [options objectForKey:@"merchantPrivacyPolicyUri"] != nil 
+    if([options objectForKey:@"merchantName"] != nil
+        && [options objectForKey:@"merchantPrivacyPolicyUri"] != nil
         && [options objectForKey:@"merchantUserAgreementUri"] != nil ) {
 
         NSString *merchantName = [RCTConvert NSString:options[@"merchantName"]];
@@ -81,6 +81,8 @@ RCT_EXPORT_METHOD(obtainConsent:(RCTPromiseResolveBlock)resolve
     self.reject = reject;
 
     PayPalFuturePaymentViewController *vc = [[PayPalFuturePaymentViewController alloc] initWithConfiguration:self.configuration delegate:self];
+    
+    vc.modalPresentationStyle = TRUE;
 
     // Present the PayPalFuturePaymentViewController
     UIViewController *visibleVC = [[[UIApplication sharedApplication] keyWindow] rootViewController];
@@ -117,19 +119,24 @@ RCT_EXPORT_METHOD(pay:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)r
     [self.configuration setAcceptCreditCards:false];
     [self.configuration setPayPalShippingAddressOption:PayPalShippingAddressOptionPayPal];
     
-    PayPalPaymentViewController *vc = [[PayPalPaymentViewController alloc] initWithPayment:self.payment
-                                                                             configuration:self.configuration
-                                                                                  delegate:self];
-    
-    UIViewController *visibleVC = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    do {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        PayPalPaymentViewController *vc = [[PayPalPaymentViewController alloc] initWithPayment:self.payment
+                                                                                 configuration:self.configuration
+                                                                                      delegate:self];
+        if (@available(iOS 13.0, *)) {
+            vc.modalInPresentation = TRUE;
+        }
+        
+        
+        UIViewController *visibleVC = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+        
         if ([visibleVC isKindOfClass:[UINavigationController class]]) {
             visibleVC = [(UINavigationController *)visibleVC visibleViewController];
         } else if (visibleVC.presentedViewController) {
             visibleVC = visibleVC.presentedViewController;
+            
         }
-    } while (visibleVC.presentedViewController);
-    dispatch_async(dispatch_get_main_queue(), ^{
+        
         [visibleVC presentViewController:vc animated:YES completion:nil];
     });
 
