@@ -272,7 +272,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../node_modules/react-native-paypal-wrapper/ios/**",
+					"${SRCROOT}/../../../ios/Pods/Headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -296,7 +296,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../node_modules/react-native-paypal-wrapper/ios/**",
+					"${SRCROOT}/../../../ios/Pods/Headers/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
